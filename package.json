@@ -1,0 +1,15 @@
+{
+  "name": "CaR",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "lpre-ys",
+  "license": "MIT",
+  "dependencies": {
+    "mithril": "^1.1.6",
+    "normalize.css": "^7.0.0"
+  }
+}
