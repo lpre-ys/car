@@ -9,7 +9,7 @@
   "author": "lpre-ys",
   "license": "MIT",
   "dependencies": {
-    "mithril": "^1.1.6",
+    "mithril": "^1.1.7",
     "normalize.css": "^7.0.0"
   }
 }
