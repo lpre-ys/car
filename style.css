@@ -3,7 +3,7 @@ h1 {
   margin-right: 1rem;
   border-left: 10px solid #AAA;
   border-bottom: 1px double #AAA;
-  width: 1024px;
+  max-width: 1024px;
   padding-left: 0.5rem;
 }
 
@@ -12,6 +12,7 @@ h1 {
   flex-direction: row;
   justify-content: center;
   align-items: stretch;
+  width: 100%;
   max-width: 1024px;
 }
 
@@ -69,4 +70,31 @@ textarea {
 
 h2 {
   margin: 0;
+}
+
+@media (max-width: 600px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .input-area {
+    border-right: none;
+    border-bottom: 3px dotted #111;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .output-area {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .list-edit {
+    flex-direction: column;
+  }
+
+  .item-list {
+    width: auto;
+    padding-left: 1.5em;
+  }
 }
