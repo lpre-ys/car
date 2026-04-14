@@ -11,7 +11,7 @@ const model = {
   execute: () => {
     model.result.length = 0;
     const list = model.list.slice();
-    for (let i = 0; i < model.number; i++) {
+    for (let i = 0; i < model.number(); i++) {
       if (list.length < 1) {
         break;
       }
@@ -45,7 +45,7 @@ const Component = {
               m('input.num[type=number]', {
                 type: 'number',
                 value: model.number(),
-                onchange: m.withAttr('value', model.number)
+                oninput: (e) => model.number(e.target.value)
               })
             ]),
             m('label', [
@@ -59,7 +59,7 @@ const Component = {
             m('label', [
               '重複：',
               m('input[type=checkbox]', {
-                onchange: m.withAttr('checked', model.isDuplicate),
+                onchange: (e) => model.isDuplicate(e.target.checked),
                 checked: model.isDuplicate()
               })
             ]),
@@ -79,11 +79,12 @@ const Component = {
           m('.list-edit', [
             m('textarea.list-text', {
               placeholder: 'input item list',
-              onkeyup: m.withAttr("value", (value) => {
-                model.input(value);
+              value: model.input(),
+              oninput: (e) => {
+                model.input(e.target.value);
                 model.setList(model.input());
-              })
-            }, model.input()),
+              }
+            }),
             m('ul.item-list', model.list.map((item) => {
               return m('li', item)
             }))
