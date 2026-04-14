@@ -1,36 +1,41 @@
 const root = document.getElementById('root');
 const model = {
   input: m.stream(''),
-  result: [],
-  list: [],
+  result: m.stream([]),
+  list: m.stream([]),
   isDuplicate: m.stream(true),
   number: m.stream(1),
   setList: (input) => {
-    model.list = input.split("\n").filter((v) => { return v.trim(); });
+    model.list(input.split("\n").filter((v) => { return v.trim(); }));
   },
   execute: () => {
-    model.result.length = 0;
-    const list = model.list.slice();
+    if (!window.crypto?.getRandomValues) {
+      alert('このブラウザは window.crypto に対応していないため利用できません。');
+      return;
+    }
+    const result = [];
+    const list = model.list().slice();
     for (let i = 0; i < model.number(); i++) {
       if (list.length < 1) {
         break;
       }
       const index = execRandom(list.length);
-      model.result.push(list[index]);
+      result.push(list[index]);
       if (!model.isDuplicate()) {
         list.splice(index, 1);
       }
     }
+    model.result(result);
   },
   reset: () => {
-    model.result.length = 0;
-    model.list.length = 0;
+    model.result([]);
+    model.list([]);
     model.input('');
   }
 };
 function execRandom(max) {
-  const buff = new Uint16Array(1);
-  const rand = window.crypto.getRandomValues(buff)[0] / 65536;
+  const buff = new Uint32Array(1);
+  const rand = window.crypto.getRandomValues(buff)[0] / 2**32;
   return Math.floor(rand * max);
 }
 const Component = {
@@ -43,17 +48,15 @@ const Component = {
             m('label', [
               '回数：',
               m('input.num[type=number]', {
-                type: 'number',
                 value: model.number(),
-                oninput: (e) => model.number(e.target.value)
+                oninput: (e) => model.number(Number(e.target.value))
               })
             ]),
             m('label', [
               'リスト長：',
               m('input.length[type=number]', {
-                readonly: 'readonly',
                 disabled: 'disabled',
-                value: model.list.length
+                value: model.list().length
               })
             ]),
             m('label', [
@@ -82,10 +85,10 @@ const Component = {
               value: model.input(),
               oninput: (e) => {
                 model.input(e.target.value);
-                model.setList(model.input());
+                model.setList(e.target.value);
               }
             }),
-            m('ul.item-list', model.list.map((item) => {
+            m('ul.item-list', model.list().map((item) => {
               return m('li', item)
             }))
           ])
@@ -95,7 +98,7 @@ const Component = {
           m('.result', [
             m('textarea', {
               readonly: 'readonly'
-            }, model.result.join("\n"))
+            }, model.result().join("\n"))
           ])
         ])
       ])
